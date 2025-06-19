@@ -46,10 +46,11 @@
     let keysPressed = {};
 
     let lastTime = (new Date()).getTime();
+    let deltaTime = 0;
     function gameLoop() {
         // adjust speeds to be in pixels per second
         let startTime = (new Date()).getTime();
-        let deltaTime = (startTime - lastTime) / 1000;
+        deltaTime = (startTime - lastTime) / 1000;
         lastTime = startTime;
 
         if (keysPressed["ArrowLeft"]) {
@@ -178,3 +179,11 @@
             stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
     {/each}
 </svg>
+
+<p>
+    FPS: {(1 / deltaTime).toFixed(0)} <br />
+    Resolution:
+    <input type="range" min="50" max="400" bind:value={camera.resolution} />
+    <input type="number" bind:value={camera.resolution} />
+    <br />
+</p>
