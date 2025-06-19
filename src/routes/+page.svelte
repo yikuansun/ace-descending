@@ -42,6 +42,14 @@
      * >} */
     let visiblePoints = [];
 
+    /** @type {Array.<{
+     * x: number,
+     * y: number,
+    }>} */
+    let entities = [
+        { x: 200, y: 256 },
+    ];
+
     let minimap = {
         size: 0.25,
         margin: 15,
@@ -64,6 +72,7 @@
         if (keysPressed["ArrowRight"]) {
             player.angle += deltaTime * player.angularVelocity;
         }
+        player.angle = player.angle % (2 * Math.PI);
 
         let movementX = 0, movementY = 0;
         if (keysPressed["w"]) {
@@ -164,6 +173,15 @@
         <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
             stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
     {/each}
+    {#each entities as entity}
+        {@const distance = Math.sqrt(Math.pow(player.x - entity.x, 2) + Math.pow(player.y - entity.y, 2))}
+        <!-- angle must be between -pi and pi, so we use modulo to correct it -->
+        {@const angle = ((Math.atan2(entity.y - player.y, entity.x - player.x) - player.angle) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI}
+        {@const x2d = (angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
+        {@const size2d = 5000 / distance}
+        <circle cx={x2d} cy={camera.viewport[1] / 2} r={size2d / 2} fill="blue" filter="brightness({1 - distance / camera.maxDepth})" />
+    {/each}
+
 
     <g transform="translate({minimap.margin}, {minimap.margin}) scale({minimap.size})">
         <image href={levelMap} x="0" y="0" />
@@ -174,6 +192,9 @@
             <line x1={player.x} y1={player.y} x2={point.x} y2={point.y}
                 stroke="orange" stroke-width="5" />
             <circle cx={point.x} cy={point.y} r="5" fill="yellow" />
+        {/each}
+        {#each entities as entity}
+            <circle cx={entity.x} cy={entity.y} r="12" fill="blue" />
         {/each}
     </g>
 </svg>
