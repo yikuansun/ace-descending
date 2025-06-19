@@ -49,6 +49,13 @@
     let entities = [
         { x: 200, y: 256 },
     ];
+    /** @type {Array.<{
+     * type: "wall" | "entity",
+     * angle: number,
+     * distance: number,
+     * color: [red: number, green: number, blue: number, alpha: number],
+    }>} */
+    let drawingStack = [];
 
     let minimap = {
         size: 0.25,
@@ -124,6 +131,43 @@
             }
         }
 
+        let entitiesToDraw = [];
+        for (let entity of entities) {
+            entitiesToDraw.push({
+                angle: ((Math.atan2(entity.y - player.y, entity.x - player.x) - player.angle) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI,
+                distance: Math.sqrt(Math.pow(player.x - entity.x, 2) + Math.pow(player.y - entity.y, 2)),
+                color: [0, 0, 255, 1],
+            });
+        }
+
+        // use a copy to prevent svelte from updating every time the array is modified
+        /**
+         * @type {Array.<{
+         * type: "wall" | "entity",
+         * angle: number,
+         * distance: number,
+         * color: [red: number, green: number, blue: number, alpha: number],
+         * }>}
+         */
+        let drawingStackTemp = [];
+        for (let point of visiblePoints) {
+            drawingStackTemp.push({
+                type: "wall",
+                angle: point.angle,
+                distance: point.distance,
+                color: point.color,
+            });
+        }
+        for (let entity of entitiesToDraw) {
+            drawingStackTemp.push({
+                type: "entity",
+                angle: entity.angle,
+                distance: entity.distance,
+                color: [0, 0, 255, 1],
+            });
+        }
+        drawingStack = drawingStackTemp.toSorted((a, b) => b.distance - a.distance);
+
         requestAnimationFrame(gameLoop);
     }
 
@@ -161,27 +205,27 @@
         </linearGradient>
     </defs>
     <rect width={camera.viewport[0]} height={camera.viewport[1]} fill="url(#bgGradient)" />
-    {#each visiblePoints as point}
-        {@const x2d = (point.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
-        {@const height2d = 20000 / point.distance}
-        {@const colorFoggy = [
-            point.color[0] * (1 - point.distance / camera.maxDepth),
-            point.color[1] * (1 - point.distance / camera.maxDepth),
-            point.color[2] * (1 - point.distance / camera.maxDepth),
-        ]}
-        {@const thickness = (camera.viewport[0] / camera.resolution)}
-        <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
-            stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
+    {#each drawingStack as item}
+        {#if item.type == "wall"}
+            {@const point = item}
+            {@const x2d = (point.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
+            {@const height2d = 20000 / point.distance}
+            {@const colorFoggy = [
+                point.color[0] * (1 - point.distance / camera.maxDepth),
+                point.color[1] * (1 - point.distance / camera.maxDepth),
+                point.color[2] * (1 - point.distance / camera.maxDepth),
+            ]}
+            {@const thickness = (camera.viewport[0] / camera.resolution)}
+            <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
+                stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
+        {/if}
+        {#if item.type == "entity"}
+            {@const entity = item}
+            {@const x2d = (entity.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
+            {@const size2d = 5000 / entity.distance}
+            <circle cx={x2d} cy={camera.viewport[1] / 2} r={size2d / 2} fill="blue" filter="brightness({1 - entity.distance / camera.maxDepth})" />
+        {/if}
     {/each}
-    {#each entities as entity}
-        {@const distance = Math.sqrt(Math.pow(player.x - entity.x, 2) + Math.pow(player.y - entity.y, 2))}
-        <!-- angle must be between -pi and pi, so we use modulo to correct it -->
-        {@const angle = ((Math.atan2(entity.y - player.y, entity.x - player.x) - player.angle) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI}
-        {@const x2d = (angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
-        {@const size2d = 5000 / distance}
-        <circle cx={x2d} cy={camera.viewport[1] / 2} r={size2d / 2} fill="blue" filter="brightness({1 - distance / camera.maxDepth})" />
-    {/each}
-
 
     <g transform="translate({minimap.margin}, {minimap.margin}) scale({minimap.size})">
         <image href={levelMap} x="0" y="0" />
