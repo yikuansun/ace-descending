@@ -30,8 +30,8 @@
      */
     let camera = {
         aov: Math.PI / 4,
-        resolution: 100,
-        maxDepth: 512,
+        resolution: 200,
+        maxDepth: 300,
         viewport: [960, 540],
         viewFactor: 500,
     };
