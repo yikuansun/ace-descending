@@ -25,13 +25,23 @@
      * @property {number} aov AOV (angle of view)
      * @property {number} resolution number of lines to render
      * @property {number} maxDepth maximum distance player can see
+     * @property {[width: number, height: number]} viewport viewport size
+     * @property {number} viewFactor view factor lol
      */
     let camera = {
         aov: Math.PI / 4,
         resolution: 100,
         maxDepth: 512,
+        viewport: [960, 540],
+        viewFactor: 500,
     };
-    /** @type {Array.<{x: number, y: number, distance: number, color: [red: number, green: number, blue: number, alpha: number]}>} */
+    /** @type {Array.<{
+     * x: number,
+     * y: number,
+     * angle: number,
+     * distance: number,
+     * color: [red: number, green: number, blue: number, alpha: number]}
+     * >} */
     let visiblePoints = [];
 
     /** @type {Object.<string, boolean>} */
@@ -92,6 +102,7 @@
                     visiblePoints = [...visiblePoints, {
                         x: rayX,
                         y: rayY,
+                        angle: angle,
                         distance: rayLength,
                         color: rayColor,
                     }];
@@ -129,7 +140,7 @@
 </script>
 
 <!-- minimap -->
-<div style:position="fixed" style:top="10px" style:left="10px" style:transform="scale(0.75)">
+<div style:position="fixed" style:top="10px" style:left="10px" style:transform="scale(0.3)">
     <img src={levelMap} alt="level map" style:position="absolute"
         style:top="0" style:left="0" />
     <div style:position="absolute" style:left="{player.x}px" style:top="{player.y}px"
@@ -147,3 +158,25 @@
     {/each}
 </div>
 
+<svg xmlns="http://www.w3.org/2000/svg" width={camera.viewport[0]} height={camera.viewport[1]}>
+    <defs>
+        <linearGradient id="bgGradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="grey" />
+            <stop offset="50%" stop-color="black" />
+            <stop offset="100%" stop-color="grey" />
+        </linearGradient>
+    </defs>
+    <rect width={camera.viewport[0]} height={camera.viewport[1]} fill="url(#bgGradient)" />
+    {#each visiblePoints as point}
+        {@const x2d = (point.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
+        {@const height2d = 20000 / point.distance}
+        {@const colorFoggy = [
+            point.color[0] * (1 - point.distance / camera.maxDepth),
+            point.color[1] * (1 - point.distance / camera.maxDepth),
+            point.color[2] * (1 - point.distance / camera.maxDepth),
+        ]}
+        {@const thickness = (camera.viewport[0] / camera.resolution)}
+        <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
+            stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
+    {/each}
+</svg>
