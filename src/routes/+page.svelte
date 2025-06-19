@@ -21,6 +21,19 @@
     }} */
     let stage;
 
+    /**
+     * @property {number} aov AOV (angle of view)
+     * @property {number} resolution number of lines to render
+     * @property {number} maxDepth maximum distance player can see
+     */
+    let camera = {
+        aov: Math.PI / 4,
+        resolution: 100,
+        maxDepth: 512,
+    };
+    /** @type {Array.<{x: number, y: number, distance: number, color: [red: number, green: number, blue: number, alpha: number]}>} */
+    let visiblePoints = [];
+
     /** @type {Object.<string, boolean>} */
     let keysPressed = {};
 
@@ -69,6 +82,24 @@
             }
         }
 
+        visiblePoints = [];
+        for (let angle = 0 - camera.aov / 2; angle < camera.aov / 2; angle += camera.aov / camera.resolution) {
+            for (let rayLength = 0; rayLength < camera.maxDepth; rayLength++) {
+                let rayX = player.x + rayLength * Math.cos(player.angle + angle);
+                let rayY = player.y + rayLength * Math.sin(player.angle + angle);
+                let rayColor = stage.data.getPixel(rayX, rayY);
+                if (rayColor[3] > 0) {
+                    visiblePoints = [...visiblePoints, {
+                        x: rayX,
+                        y: rayY,
+                        distance: rayLength,
+                        color: rayColor,
+                    }];
+                    break;
+                }
+            }
+        }
+
         requestAnimationFrame(gameLoop);
     }
 
@@ -108,5 +139,11 @@
             style:background-color="black">
         </div>
     </div>
+    {#each visiblePoints as point}
+        <div style:position="absolute" style:left="{point.x}px" style:top="{point.y}px"
+            style:transform="translate(-50%, -50%)" style:border-radius="2.5px"
+            style:width="5px" style:height="5px" style:background-color="orange">
+        </div>
+    {/each}
 </div>
 
