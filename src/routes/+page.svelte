@@ -42,6 +42,11 @@
      * >} */
     let visiblePoints = [];
 
+    let minimap = {
+        size: 0.25,
+        margin: 15,
+    }
+
     /** @type {Object.<string, boolean>} */
     let keysPressed = {};
 
@@ -138,25 +143,6 @@
     });
 </script>
 
-<!-- minimap -->
-<div style:position="fixed" style:top="10px" style:left="10px" style:transform="scale(0.3)">
-    <img src={levelMap} alt="level map" style:position="absolute"
-        style:top="0" style:left="0" />
-    <div style:position="absolute" style:left="{player.x}px" style:top="{player.y}px"
-        style:transform="translate(-50%, -50%) rotate({player.angle}rad)" style:width="25px" style:height="25px"
-        style:background-color="red">
-        <div style:position="absolute" style:left="12.5px" style:top="10px" style:width="12.5px" style:height="5px"
-            style:background-color="black">
-        </div>
-    </div>
-    {#each visiblePoints as point}
-        <div style:position="absolute" style:left="{point.x}px" style:top="{point.y}px"
-            style:transform="translate(-50%, -50%)" style:border-radius="2.5px"
-            style:width="5px" style:height="5px" style:background-color="orange">
-        </div>
-    {/each}
-</div>
-
 <svg xmlns="http://www.w3.org/2000/svg" width={camera.viewport[0]} height={camera.viewport[1]}>
     <defs>
         <linearGradient id="bgGradient" x1="0" x2="0" y1="0" y2="1">
@@ -178,6 +164,18 @@
         <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
             stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
     {/each}
+
+    <g transform="translate({minimap.margin}, {minimap.margin}) scale({minimap.size})">
+        <image href={levelMap} x="0" y="0" />
+        <circle cx={player.x} cy={player.y} r="12" fill="red" />
+        <line x1={player.x} y1={player.y} x2={player.x + 12 * Math.cos(player.angle)} y2={player.y + 12 * Math.sin(player.angle)}
+            stroke="black" stroke-width="5" />
+        {#each visiblePoints as point}
+            <line x1={player.x} y1={player.y} x2={point.x} y2={point.y}
+                stroke="orange" stroke-width="5" />
+            <circle cx={point.x} cy={point.y} r="5" fill="yellow" />
+        {/each}
+    </g>
 </svg>
 
 <p>
