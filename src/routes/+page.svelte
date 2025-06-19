@@ -13,8 +13,13 @@
         linearVelocity: 60,
     };
 
-    /** @type {PixelManipulator} */
-    let minimapData;
+    /** @type {{
+     * width: number,
+     * height: number,
+     * data: PixelManipulator,
+     * image: HTMLImageElement,
+    }} */
+    let stage;
 
     /** @type {Object.<string, boolean>} */
     let keysPressed = {};
@@ -51,14 +56,14 @@
             movementY = deltaTime * player.linearVelocity * Math.cos(player.angle);
         }
 
-        if (minimapData.getPixel(player.x, player.y)[3] === 0) {
+        if (stage.data.getPixel(player.x, player.y)[3] === 0) {
             player.x += movementX;
-            if (minimapData.getPixel(player.x, player.y)[3] > 0) {
+            if (stage.data.getPixel(player.x, player.y)[3] > 0) {
                 // collision on x-axis
                 player.x -= movementX;
             }
             player.y += movementY;
-            if (minimapData.getPixel(player.x, player.y)[3] > 0) {
+            if (stage.data.getPixel(player.x, player.y)[3] > 0) {
                 // collision on y-axis
                 player.y -= movementY;
             }
@@ -73,7 +78,12 @@
         canvas.width = img.width;
         canvas.height = img.height;
         canvas.getContext("2d")?.drawImage(img, 0, 0);
-        minimapData = new PixelManipulator(canvas);
+        stage = {
+            width: img.width,
+            height: img.height,
+            data: new PixelManipulator(canvas),
+            image: img,
+        };
 
         window.addEventListener("keydown", (e) => {
             keysPressed[e.key] = true;
