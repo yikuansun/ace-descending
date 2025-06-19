@@ -26,14 +26,12 @@
      * @property {number} resolution number of lines to render
      * @property {number} maxDepth maximum distance player can see
      * @property {[width: number, height: number]} viewport viewport size
-     * @property {number} viewFactor view factor lol
      */
     let camera = {
         aov: Math.PI / 4,
         resolution: 200,
         maxDepth: 300,
         viewport: [960, 540],
-        viewFactor: 500,
     };
     /** @type {Array.<{
      * x: number,
