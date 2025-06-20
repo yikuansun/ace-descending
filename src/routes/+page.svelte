@@ -73,10 +73,10 @@
         deltaTime = (startTime - lastTime) / 1000;
         lastTime = startTime;
 
-        if (keysPressed["ArrowLeft"]) {
+        if (keysPressed["["]) {
             player.angle -= deltaTime * player.angularVelocity;
         }
-        if (keysPressed["ArrowRight"]) {
+        if (keysPressed["]"]) {
             player.angle += deltaTime * player.angularVelocity;
         }
         player.angle = player.angle % (2 * Math.PI);
