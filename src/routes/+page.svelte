@@ -244,7 +244,11 @@
 </svg>
 
 <p>
-    FPS: {(1 / deltaTime).toFixed(0)} <br />
+    FPS:
+    <span style:color={(1 / deltaTime > 50) ? "darkgreen" : ((1 / deltaTime > 25) ? "darkyellow" : "darkred")}>
+        {(1 / deltaTime).toFixed(0)}
+    </span>
+    <br />
     Resolution:
     <input type="range" min="50" max="400" bind:value={camera.resolution} />
     <input type="number" bind:value={camera.resolution} />
