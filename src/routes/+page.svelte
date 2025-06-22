@@ -5,6 +5,8 @@
 
     import levelMap from "$lib/levels/test.png";
 
+    export let screenWidth = 960, screenHeight = 540;
+
     let player = {
         x: 100,
         y: 256,
@@ -31,7 +33,7 @@
         aov: Math.PI / 4,
         resolution: 200,
         maxDepth: 300,
-        viewport: [960, 540],
+        viewport: [screenWidth, screenHeight],
     };
     /** @type {Array.<{
      * x: number,
@@ -196,59 +198,55 @@
     });
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {camera.viewport[0]} {camera.viewport[1]}"
-    style:position="fixed" style:top="50vh" style:left="50vw" style:transform="translate(-50%, -50%)"
-    style:width="100vw" style:height="100vh">
-    <defs>
-        <linearGradient id="bgGradient" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="grey" />
-            <stop offset="50%" stop-color="black" />
-            <stop offset="100%" stop-color="grey" />
-        </linearGradient>
-        <clipPath id="screenClip">
-            <rect width={camera.viewport[0]} height={camera.viewport[1]} x="0" y="0" />
-        </clipPath>
-    </defs>
-    <g clip-path="url(#screenClip)">
-        <rect width={camera.viewport[0]} height={camera.viewport[1]} fill="url(#bgGradient)" />
-        {#each drawingStack as item}
-            {#if item.type == "wall"}
-                {@const point = item}
-                {@const x2d = (point.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
-                {@const height2d = 20000 / point.distance}
-                {@const colorFoggy = [
-                    point.color[0] * (1 - point.distance / camera.maxDepth),
-                    point.color[1] * (1 - point.distance / camera.maxDepth),
-                    point.color[2] * (1 - point.distance / camera.maxDepth),
-                ]}
-                {@const thickness = (camera.viewport[0] / camera.resolution)}
-                <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
-                    stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
-            {/if}
-            {#if item.type == "entity"}
-                {@const entity = item}
-                {@const x2d = (entity.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
-                {@const size2d = 5000 / entity.distance}
-                <circle cx={x2d} cy={camera.viewport[1] / 2} r={size2d / 2} fill="blue" filter="brightness({1 - entity.distance / camera.maxDepth})" />
-            {/if}
-        {/each}
+<defs>
+    <linearGradient id="bgGradient" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="grey" />
+        <stop offset="50%" stop-color="black" />
+        <stop offset="100%" stop-color="grey" />
+    </linearGradient>
+    <clipPath id="screenClip">
+        <rect width={camera.viewport[0]} height={camera.viewport[1]} x="0" y="0" />
+    </clipPath>
+</defs>
+<g clip-path="url(#screenClip)">
+    <rect width={camera.viewport[0]} height={camera.viewport[1]} fill="url(#bgGradient)" />
+    {#each drawingStack as item}
+        {#if item.type == "wall"}
+            {@const point = item}
+            {@const x2d = (point.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
+            {@const height2d = 20000 / point.distance}
+            {@const colorFoggy = [
+                point.color[0] * (1 - point.distance / camera.maxDepth),
+                point.color[1] * (1 - point.distance / camera.maxDepth),
+                point.color[2] * (1 - point.distance / camera.maxDepth),
+            ]}
+            {@const thickness = (camera.viewport[0] / camera.resolution)}
+            <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
+                stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
+        {/if}
+        {#if item.type == "entity"}
+            {@const entity = item}
+            {@const x2d = (entity.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
+            {@const size2d = 5000 / entity.distance}
+            <circle cx={x2d} cy={camera.viewport[1] / 2} r={size2d / 2} fill="blue" filter="brightness({1 - entity.distance / camera.maxDepth})" />
+        {/if}
+    {/each}
 
-        <g transform="translate({minimap.margin}, {minimap.margin}) scale({minimap.size})">
-            <image href={levelMap} x="0" y="0" />
-            <circle cx={player.x} cy={player.y} r="12" fill="red" />
-            <line x1={player.x} y1={player.y} x2={player.x + 12 * Math.cos(player.angle)} y2={player.y + 12 * Math.sin(player.angle)}
-                stroke="black" stroke-width="5" />
-            {#each visiblePoints as point}
-                <line x1={player.x} y1={player.y} x2={point.x} y2={point.y}
-                    stroke="orange" stroke-width="5" />
-                <circle cx={point.x} cy={point.y} r="5" fill="yellow" />
-            {/each}
-            {#each entities as entity}
-                <circle cx={entity.x} cy={entity.y} r="12" fill="blue" />
-            {/each}
-        </g>
+    <g transform="translate({minimap.margin}, {minimap.margin}) scale({minimap.size})">
+        <image href={levelMap} x="0" y="0" />
+        <circle cx={player.x} cy={player.y} r="12" fill="red" />
+        <line x1={player.x} y1={player.y} x2={player.x + 12 * Math.cos(player.angle)} y2={player.y + 12 * Math.sin(player.angle)}
+            stroke="black" stroke-width="5" />
+        {#each visiblePoints as point}
+            <line x1={player.x} y1={player.y} x2={point.x} y2={point.y}
+                stroke="orange" stroke-width="5" />
+            <circle cx={point.x} cy={point.y} r="5" fill="yellow" />
+        {/each}
+        {#each entities as entity}
+            <circle cx={entity.x} cy={entity.y} r="12" fill="blue" />
+        {/each}
     </g>
-</svg>
+</g>
 
 <p style:position="fixed" style:top="0" style:right="0" style:padding="10px"
     style:background-color="rgba(0, 0, 0, 0.5)" style:color="white" style:margin="0">
