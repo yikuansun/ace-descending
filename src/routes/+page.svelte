@@ -248,15 +248,17 @@
     </g>
 </g>
 
-<p style:position="fixed" style:top="0" style:right="0" style:padding="10px"
-    style:background-color="rgba(0, 0, 0, 0.5)" style:color="white" style:margin="0">
-    FPS:
-    <span style:color={(1 / deltaTime > 50) ? "darkgreen" : ((1 / deltaTime > 25) ? "darkyellow" : "darkred")}>
-        {(1 / deltaTime).toFixed(0)}
-    </span>
-    <br />
-    Resolution:
-    <input type="range" min="50" max="400" bind:value={camera.resolution} />
-    <input type="number" bind:value={camera.resolution} style:width="50px" />
-    <br />
-</p>
+<foreignObject x="0" y="0" width="100%" height="100%">
+    <p style:position="fixed" style:top="0" style:right="0" style:padding="10px"
+        style:background-color="rgba(0, 0, 0, 0.5)" style:color="white" style:margin="0">
+        FPS:
+        <span style:color={(1 / deltaTime > 50) ? "darkgreen" : ((1 / deltaTime > 25) ? "darkyellow" : "darkred")}>
+            {(1 / deltaTime).toFixed(0)}
+        </span>
+        <br />
+        Resolution:
+        <input type="range" min="50" max="400" bind:value={camera.resolution} />
+        <input type="number" bind:value={camera.resolution} style:width="50px" />
+        <br />
+    </p>
+</foreignObject>
