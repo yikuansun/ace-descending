@@ -1,23 +1,27 @@
 import loadImage from "$lib/helpers/loadImage.js";
+import roomTexture1 from "$lib/assets/roomTextures/basic.png";
 
 class Room {
     /** @type {"up" | "down" | "left" | "right" | "none"} */
     pointer = "right";
+    anchorPoint = { x: 0, y: 0 };
 
     /**
      * Create new room
      * @param {"up" | "down" | "left" | "right" | "none"} pointer Direction of node's pointer
+     * @param {{ x: number, y: number }} anchorPoint Coordinates of top-left corner of room
      */
-    constructor(pointer) {
+    constructor(pointer, anchorPoint={ x: 0, y: 0 }) {
         this.pointer = pointer;
+        this.anchorPoint = anchorPoint;
     }
 }
 
 export default class LevelGenerator {
     gridSize = 5;
     roomSize = 128;
-    corridorWidth = 32;
-    corridorLength = 32;
+    corridorWidth = 42;
+    corridorLength = 24;
 
     /** @type {Array.<Array.<Room>>} */
     grid = [];
@@ -36,6 +40,20 @@ export default class LevelGenerator {
         this.corridorLength = corridorLength;
     }
 
+    /** @type {Array.<string>} */
+    textureSrcs = [
+        roomTexture1,
+    ];
+    /** @type {Array.<HTMLImageElement>} */
+    textures = [];
+
+    async loadTextures() {
+        for (let src of this.textureSrcs) {
+            let img = await loadImage(src);
+            this.textures.push(img);
+        }
+    }
+
     createMaze(iterations = 10) {
         /** @type {[row: number, column: number]} */
         let originPos = [this.gridSize - 1, this.gridSize - 1];
@@ -43,7 +61,7 @@ export default class LevelGenerator {
         for (let i = 0; i < this.gridSize; i++) {
             this.grid[i] = [];
             for (let j = 0; j < this.gridSize; j++) {
-                this.grid[i][j] = new Room("right");
+                this.grid[i][j] = new Room("right", { x: j * this.roomSize, y: i * this.roomSize });
                 if (j == this.gridSize - 1) {
                     this.grid[i][j].pointer = "down";
                     if (i == this.gridSize - 1) {
@@ -85,6 +103,78 @@ export default class LevelGenerator {
                     break;
             }
         }
+    }
+
+    getRandomTexture() {
+        return this.textures[Math.floor(Math.random() * this.textures.length)];
+    }
+
+    render() {
+        let canvas = document.createElement("canvas");
+        canvas.width = this.roomSize * this.gridSize;
+        canvas.height = this.roomSize * this.gridSize;
+        /** @type {CanvasRenderingContext2D} */
+        let ctx = canvas.getContext("2d");
+        ctx.save();
+
+        for (let i = 0; i < this.gridSize; i++) {
+            for (let j = 0; j < this.gridSize; j++) {
+                let room = this.grid[i][j];
+                ctx.translate(room.anchorPoint.x, room.anchorPoint.y);
+                let texture = this.getRandomTexture();
+                ctx.drawImage(texture, 0, 0, this.roomSize, this.roomSize);
+
+                ctx.restore();
+                ctx.save();
+            }
+        }
+
+        for (let i = 0; i < this.gridSize; i++) {
+            for (let j = 0; j < this.gridSize; j++) {
+                let room = this.grid[i][j];
+                ctx.translate(room.anchorPoint.x, room.anchorPoint.y);
+                switch (room.pointer) {
+                    case "up":
+                        ctx.clearRect(
+                            this.roomSize / 2 - this.corridorWidth / 2,
+                            0 - this.corridorLength / 2,
+                            this.corridorWidth,
+                            this.corridorLength,
+                        );
+                        break;
+                    case "down":
+                        ctx.clearRect(
+                            this.roomSize / 2 - this.corridorWidth / 2,
+                            this.roomSize - this.corridorLength / 2,
+                            this.corridorWidth,
+                            this.corridorLength,
+                        );
+                        break;
+                    case "left":
+                        ctx.clearRect(
+                            0 - this.corridorLength / 2,
+                            this.roomSize / 2 - this.corridorWidth / 2,
+                            this.corridorLength,
+                            this.corridorWidth,
+                        );
+                        break;
+                    case "right":
+                        ctx.clearRect(
+                            this.roomSize - this.corridorLength / 2,
+                            this.roomSize / 2 - this.corridorWidth / 2,
+                            this.corridorLength,
+                            this.corridorWidth,
+                        );
+                        break;
+                }
+
+
+                ctx.restore();
+                ctx.save();
+            }
+        }
+
+        return canvas;
     }
 
 }

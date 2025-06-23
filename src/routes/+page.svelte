@@ -2,14 +2,15 @@
     import { onMount } from "svelte";
     import PixelManipulator from "$lib/helpers/PixelManipulator";
     import loadImage from "$lib/helpers/loadImage";
+    import LevelGenerator from "$lib/helpers/LevelGenerator";
 
     import levelMap from "$lib/levels/test.png";
 
     export let screenWidth = 960, screenHeight = 540;
 
     let player = {
-        x: 100,
-        y: 256,
+        x: 64,
+        y: 64,
         angle: 0,
         angularVelocity: 2,
         linearVelocity: 60,
@@ -19,7 +20,7 @@
      * width: number,
      * height: number,
      * data: PixelManipulator,
-     * image: HTMLImageElement,
+     * image: HTMLImageElement | HTMLCanvasElement,
     }} */
     let stage;
 
@@ -173,8 +174,23 @@
         requestAnimationFrame(gameLoop);
     }
 
+    let stageImageSrc = levelMap;
+    async function initStage() {
+        let levelGen = new LevelGenerator(5, 128, 42, 24);
+        await levelGen.loadTextures();
+        levelGen.createMaze(200);
+        let canvas = levelGen.render();
+        stage = {
+            width: levelGen.roomSize * levelGen.gridSize,
+            height: levelGen.roomSize * levelGen.gridSize,
+            data: new PixelManipulator(canvas),
+            image: canvas,
+        };
+        stageImageSrc = canvas.toDataURL();
+    }
+
     onMount(async () => {
-        const img = await loadImage(levelMap);
+        /*const img = await loadImage(levelMap);
         let canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
@@ -184,7 +200,8 @@
             height: img.height,
             data: new PixelManipulator(canvas),
             image: img,
-        };
+        };*/
+        await initStage();
 
         window.addEventListener("keydown", (e) => {
             keysPressed[e.key] = true;
@@ -233,7 +250,7 @@
     {/each}
 
     <g transform="translate({minimap.margin}, {minimap.margin}) scale({minimap.size})">
-        <image href={levelMap} x="0" y="0" />
+        <image href={stageImageSrc} x="0" y="0" />
         <circle cx={player.x} cy={player.y} r="12" fill="red" />
         <line x1={player.x} y1={player.y} x2={player.x + 12 * Math.cos(player.angle)} y2={player.y + 12 * Math.sin(player.angle)}
             stroke="black" stroke-width="5" />
