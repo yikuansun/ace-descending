@@ -9,3 +9,7 @@
     style:width="100vw" style:height="100vh">
     <slot {screenWidth} {screenHeight} />
 </svg>
+
+<svelte:head>
+    <title>Ace Descending</title>
+</svelte:head>
