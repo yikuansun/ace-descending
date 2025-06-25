@@ -203,17 +203,19 @@
         };*/
         await initStage();
 
-        window.addEventListener("keydown", (e) => {
-            keysPressed[e.key] = true;
-        });
-        window.addEventListener("keyup", (e) => {
-            keysPressed[e.key] = false;
-        });
-
         lastTime = (new Date()).getTime();
         requestAnimationFrame(gameLoop);
     });
 </script>
+
+<svelte:window
+    on:keydown={(e) => {
+        keysPressed[e.key] = true;
+    }}
+    on:keyup={(e) => {
+        keysPressed[e.key] = false;
+    }}
+/>
 
 <defs>
     <linearGradient id="bgGradient" x1="0" x2="0" y1="0" y2="1">
