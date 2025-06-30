@@ -1,5 +1,9 @@
 import loadImage from "$lib/helpers/loadImage.js";
 import roomTexture1 from "$lib/assets/roomTextures/basic.png";
+import roomTexture2 from "$lib/assets/roomTextures/dicey.png";
+import roomTexture3 from "$lib/assets/roomTextures/octagon.png";
+import roomTexture4 from "$lib/assets/roomTextures/barriers.png";
+import roomTexture5 from "$lib/assets/roomTextures/stripes.png";
 
 class Room {
     /** @type {"up" | "down" | "left" | "right" | "none"} */
@@ -42,7 +46,7 @@ export default class LevelGenerator {
 
     /** @type {Array.<string>} */
     textureSrcs = [
-        roomTexture1,
+        roomTexture1, roomTexture2, roomTexture3, roomTexture4, roomTexture5,
     ];
     /** @type {Array.<HTMLImageElement>} */
     textures = [];
