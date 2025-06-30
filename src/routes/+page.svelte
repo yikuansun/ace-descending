@@ -174,6 +174,8 @@
         requestAnimationFrame(gameLoop);
     }
 
+    let wallHeight = 30000;
+
     let stageImageSrc = levelMap;
     async function initStage() {
         let levelGen = new LevelGenerator(4, 256, 84, 50);
@@ -230,7 +232,7 @@
     {#if item.type == "wall"}
         {@const point = item}
         {@const x2d = (point.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
-        {@const height2d = 20000 / point.distance}
+        {@const height2d = wallHeight / point.distance}
         {@const colorFoggy = [
             point.color[0] * (1 - point.distance / camera.maxDepth),
             point.color[1] * (1 - point.distance / camera.maxDepth),
