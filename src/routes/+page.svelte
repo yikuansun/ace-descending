@@ -176,7 +176,7 @@
 
     let stageImageSrc = levelMap;
     async function initStage() {
-        let levelGen = new LevelGenerator(5, 128, 42, 24);
+        let levelGen = new LevelGenerator(4, 256, 84, 50);
         await levelGen.loadTextures();
         levelGen.createMaze(200);
         let canvas = levelGen.render();

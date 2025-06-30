@@ -1,9 +1,9 @@
 import loadImage from "$lib/helpers/loadImage.js";
-import roomTexture1 from "$lib/assets/roomTextures/basic.png";
-import roomTexture2 from "$lib/assets/roomTextures/dicey.png";
-import roomTexture3 from "$lib/assets/roomTextures/octagon.png";
-import roomTexture4 from "$lib/assets/roomTextures/barriers.png";
-import roomTexture5 from "$lib/assets/roomTextures/stripes.png";
+import roomTexture1 from "$lib/assets/roomTextures/basic.svg";
+import roomTexture2 from "$lib/assets/roomTextures/dicey.svg";
+import roomTexture3 from "$lib/assets/roomTextures/octagon.svg";
+import roomTexture4 from "$lib/assets/roomTextures/barriers.svg";
+import roomTexture5 from "$lib/assets/roomTextures/stripes.svg";
 
 class Room {
     /** @type {"up" | "down" | "left" | "right" | "none"} */

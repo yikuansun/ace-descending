@@ -1,0 +1,31 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+	<title>basic</title>
+	<style>
+		.s0 { fill: #808080 } 
+		.s1 { fill: #5e5e5e } 
+	</style>
+	<path id="Shape 1" fill-rule="evenodd" class="s0" d="m12 0v128h-12v-128z"/>
+	<path id="Shape 1 copy" fill-rule="evenodd" class="s0" d="m128 12h-128v-12h128z"/>
+	<path id="Shape 1 copy 2" fill-rule="evenodd" class="s0" d="m116 128v-128h12v128z"/>
+	<path id="Shape 1 copy 3" fill-rule="evenodd" class="s0" d="m0 116h128v12h-128z"/>
+	<path id="Shape 2" fill-rule="evenodd" class="s1" d="m12 11v1h-1v-1z"/>
+	<path id="Shape 3" fill-rule="evenodd" class="s1" d="m35 11v1h-12v-1z"/>
+	<path id="Shape 4" fill-rule="evenodd" class="s1" d="m59 11v1h-12v-1z"/>
+	<path id="Shape 5" fill-rule="evenodd" class="s1" d="m82 11v1h-12v-1z"/>
+	<path id="Shape 6" fill-rule="evenodd" class="s1" d="m105 11v1h-12v-1z"/>
+	<path id="Shape 7" fill-rule="evenodd" class="s1" d="m117 11v1h-1v-1z"/>
+	<path id="Shape 8" fill-rule="evenodd" class="s1" d="m117 23v12h-1v-12z"/>
+	<path id="Shape 9" fill-rule="evenodd" class="s1" d="m117 47v12h-1v-12z"/>
+	<path id="Shape 10" fill-rule="evenodd" class="s1" d="m117 70v12h-1v-12z"/>
+	<path id="Shape 11" fill-rule="evenodd" class="s1" d="m117 93v12h-1v-12z"/>
+	<path id="Shape 12" fill-rule="evenodd" class="s1" d="m117 116v1h-1v-1z"/>
+	<path id="Shape 13" fill-rule="evenodd" class="s1" d="m105 116v1h-12v-1z"/>
+	<path id="Shape 14" fill-rule="evenodd" class="s1" d="m82 116v1h-12v-1z"/>
+	<path id="Shape 15" fill-rule="evenodd" class="s1" d="m59 116v1h-12v-1z"/>
+	<path id="Shape 16" fill-rule="evenodd" class="s1" d="m35 116v1h-12v-1z"/>
+	<path id="Shape 17" fill-rule="evenodd" class="s1" d="m12 116v1h-1v-1z"/>
+	<path id="Shape 18" fill-rule="evenodd" class="s1" d="m12 93v12h-1v-12z"/>
+	<path id="Shape 19" fill-rule="evenodd" class="s1" d="m12 70v12h-1v-12z"/>
+	<path id="Shape 20" fill-rule="evenodd" class="s1" d="m12 47v12h-1v-12z"/>
+	<path id="Shape 21" fill-rule="evenodd" class="s1" d="m12 23v12h-1v-12z"/>
+</svg>

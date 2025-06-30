@@ -1,0 +1,15 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+	<title>dicey</title>
+	<style>
+		.s0 { fill: #525252 } 
+		.s1 { fill: #808080 } 
+	</style>
+	<path id="Shape 2" fill-rule="evenodd" class="s0" d="m32 40c-4.4 0-8-3.6-8-8 0-4.4 3.6-8 8-8 4.4 0 8 3.6 8 8 0 4.4-3.6 8-8 8z"/>
+	<path id="Shape 2 copy" fill-rule="evenodd" class="s0" d="m96 40c-4.4 0-8-3.6-8-8 0-4.4 3.6-8 8-8 4.4 0 8 3.6 8 8 0 4.4-3.6 8-8 8z"/>
+	<path id="Shape 2 copy 2" fill-rule="evenodd" class="s0" d="m32 104c-4.4 0-8-3.6-8-8 0-4.4 3.6-8 8-8 4.4 0 8 3.6 8 8 0 4.4-3.6 8-8 8z"/>
+	<path id="Shape 2 copy 3" fill-rule="evenodd" class="s0" d="m96 104c-4.4 0-8-3.6-8-8 0-4.4 3.6-8 8-8 4.4 0 8 3.6 8 8 0 4.4-3.6 8-8 8z"/>
+	<path id="Shape 1" fill-rule="evenodd" class="s1" d="m12 0v128h-12v-128z"/>
+	<path id="Shape 1 copy" fill-rule="evenodd" class="s1" d="m128 12h-128v-12h128z"/>
+	<path id="Shape 1 copy 2" fill-rule="evenodd" class="s1" d="m116 128v-128h12v128z"/>
+	<path id="Shape 1 copy 3" fill-rule="evenodd" class="s1" d="m0 116h128v12h-128z"/>
+</svg>
