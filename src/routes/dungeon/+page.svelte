@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { onDestroy } from "svelte";
     import PixelManipulator from "$lib/helpers/PixelManipulator";
     import loadImage from "$lib/helpers/loadImage";
     import LevelGenerator from "$lib/helpers/LevelGenerator";
@@ -70,6 +71,8 @@
 
     let lastTime = (new Date()).getTime();
     let deltaTime = 0;
+    /** @type {number} */
+    let animationFrameId = -1;
     function gameLoop() {
         // adjust speeds to be in pixels per second
         let startTime = (new Date()).getTime();
@@ -171,7 +174,7 @@
         }
         drawingStack = drawingStackTemp.toSorted((a, b) => b.distance - a.distance);
 
-        requestAnimationFrame(gameLoop);
+        animationFrameId = requestAnimationFrame(gameLoop);
     }
 
     let wallHeight = 30000;
@@ -207,6 +210,10 @@
 
         lastTime = (new Date()).getTime();
         requestAnimationFrame(gameLoop);
+    });
+
+    onDestroy(() => {
+        cancelAnimationFrame(animationFrameId);
     });
 </script>
 
