@@ -1,6 +1,21 @@
 <script>
+    import { afterNavigate, onNavigate } from "$app/navigation";
+    import { fade } from "svelte/transition";
+
     let screenWidth = 960;
     let screenHeight = 540;
+
+    let curtainVisible = false;
+    let TRANSITION_DURATION = 700;
+
+    onNavigate(async () => {
+        curtainVisible = true;
+        await new Promise(r => setTimeout(r, TRANSITION_DURATION));
+    });
+
+    afterNavigate(() => {
+        curtainVisible = false;
+    })
 </script>
 
 
@@ -15,6 +30,10 @@
     <g clip-path="url(#screenClip)">
         <slot {screenWidth} {screenHeight} />
     </g>
+    {#if curtainVisible}
+        <rect width={screenWidth} height={screenHeight} x="0" y="0" fill="black"
+            transition:fade={{ duration: TRANSITION_DURATION }} />
+    {/if}
 </svg>
 
 <svelte:head>
