@@ -9,8 +9,8 @@
     export let screenWidth = 960, screenHeight = 540;
 
     let player = {
-        x: 64,
-        y: 64,
+        x: 128,
+        y: 128,
         angle: 0,
         angularVelocity: 2,
         linearVelocity: 60,
@@ -255,11 +255,11 @@
     <circle cx={player.x} cy={player.y} r="12" fill="red" />
     <line x1={player.x} y1={player.y} x2={player.x + 12 * Math.cos(player.angle)} y2={player.y + 12 * Math.sin(player.angle)}
         stroke="black" stroke-width="5" />
-    {#each visiblePoints as point}
+    <!--{#each visiblePoints as point}
         <line x1={player.x} y1={player.y} x2={point.x} y2={point.y}
             stroke="orange" stroke-width="5" />
         <circle cx={point.x} cy={point.y} r="5" fill="yellow" />
-    {/each}
+    {/each}-->
     {#each entities as entity}
         <circle cx={entity.x} cy={entity.y} r="12" fill="blue" />
     {/each}
