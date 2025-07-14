@@ -33,7 +33,7 @@
     let camera = {
         aov: Math.PI / 4,
         resolution: 200,
-        maxDepth: 300,
+        maxDepth: 600,
         viewport: [screenWidth, screenHeight],
     };
     /** @type {Array.<{
