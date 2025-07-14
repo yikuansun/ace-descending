@@ -69,13 +69,13 @@
     /** @type {Object.<string, boolean>} */
     let keysPressed = {};
 
-    let lastTime = (new Date()).getTime();
+    let lastTime = Date.now();
     let deltaTime = 0;
     /** @type {number} */
     let animationFrameId = -1;
     function gameLoop() {
         // adjust speeds to be in pixels per second
-        let startTime = (new Date()).getTime();
+        let startTime = Date.now();
         deltaTime = (startTime - lastTime) / 1000;
         lastTime = startTime;
 
@@ -208,8 +208,8 @@
         };*/
         await initStage();
 
-        lastTime = (new Date()).getTime();
-        requestAnimationFrame(gameLoop);
+        lastTime = Date.now();
+        animationFrameId = requestAnimationFrame(gameLoop);
     });
 
     onDestroy(() => {
