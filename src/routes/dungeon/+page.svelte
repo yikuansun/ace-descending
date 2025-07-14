@@ -213,7 +213,9 @@
     });
 
     onDestroy(() => {
-        cancelAnimationFrame(animationFrameId);
+        if (animationFrameId !== -1) {
+            cancelAnimationFrame(animationFrameId);
+        }
     });
 </script>
 
