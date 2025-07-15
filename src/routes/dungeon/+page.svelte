@@ -279,9 +279,9 @@
 
 {#if pauseMenuVisible}
     <rect x={0} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
-        in:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: -camera.viewport[0] / 2, duration: 700, delay: 500 }} />
+        in:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} />
     <rect x={camera.viewport[0] / 2} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
-        in:fly={{ x: camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: camera.viewport[0] / 2, duration: 700, delay: 500 }} />
+        in:fly={{ x: camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: camera.viewport[0] / 2, duration: 700 }} />
     <foreignObject x="0" y="0" width="100%" height="100%"
         in:fade={{ delay: 700, duration: 500 }} out:fade={{ duration: 500 }}>
         <div style:width="100%" style:height="100%" style:display="flex"
@@ -289,8 +289,10 @@
             <h1 style:color="white">Game Paused</h1>
             <button on:click={() => {
                 pauseMenuVisible = false;
-                lastTime = Date.now();
-                animationFrameId = requestAnimationFrame(gameLoop);
+                if (animationFrameId === -1) {
+                    lastTime = Date.now();
+                    animationFrameId = requestAnimationFrame(gameLoop);
+                }
             }}>Resume</button>
         </div>
     </foreignObject>
@@ -300,10 +302,15 @@
 <foreignObject x={camera.viewport[0] - 40} y={10} width="30" height="30">
     <button on:click={() => {
             pauseMenuVisible = !pauseMenuVisible;
-            if (pauseMenuVisible) cancelAnimationFrame(animationFrameId);
+            if (pauseMenuVisible) {
+                if (animationFrameId !== -1) cancelAnimationFrame(animationFrameId);
+                animationFrameId = -1;
+            }
             else {
-                lastTime = Date.now();
-                animationFrameId = requestAnimationFrame(gameLoop);
+                if (animationFrameId === -1) {
+                    lastTime = Date.now();
+                    animationFrameId = requestAnimationFrame(gameLoop);
+                }
             }
         }} style:width="100%" style:height="100%">
         Pause
