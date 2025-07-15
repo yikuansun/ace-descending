@@ -6,6 +6,7 @@
     import LevelGenerator from "$lib/helpers/LevelGenerator";
 
     import levelMap from "$lib/levels/test.png";
+    import { fly, fade } from "svelte/transition";
 
     export let screenWidth = 960, screenHeight = 540;
 
@@ -194,6 +195,8 @@
         stageImageSrc = canvas.toDataURL();
     }
 
+    let pauseMenuVisible = false;
+
     onMount(async () => {
         /*const img = await loadImage(levelMap);
         let canvas = document.createElement("canvas");
@@ -274,7 +277,41 @@
     {/each}
 </g>
 
+{#if pauseMenuVisible}
+    <rect x={0} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
+        in:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: -camera.viewport[0] / 2, duration: 700, delay: 500 }} />
+    <rect x={camera.viewport[0] / 2} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
+        in:fly={{ x: camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: camera.viewport[0] / 2, duration: 700, delay: 500 }} />
+    <foreignObject x="0" y="0" width="100%" height="100%"
+        in:fade={{ delay: 700, duration: 500 }} out:fade={{ duration: 500 }}>
+        <div style:width="100%" style:height="100%" style:display="flex"
+            style:flex-direction="column" style:align-items="center" style:justify-content="center">
+            <h1 style:color="white">Game Paused</h1>
+            <button on:click={() => {
+                pauseMenuVisible = false;
+                lastTime = Date.now();
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }}>Resume</button>
+        </div>
+    </foreignObject>
+{/if}
 
+<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+<foreignObject x={camera.viewport[0] - 40} y={10} width="30" height="30">
+    <button on:click={() => {
+            pauseMenuVisible = !pauseMenuVisible;
+            if (pauseMenuVisible) cancelAnimationFrame(animationFrameId);
+            else {
+                lastTime = Date.now();
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }
+        }} style:width="100%" style:height="100%">
+        Pause
+    </button>
+</foreignObject>
+
+<!-- developer panel -->
+<!--
 <foreignObject x="0" y="0" width="100%" height="100%">
     <p style:position="fixed" style:top="0" style:right="0" style:padding="10px"
         style:background-color="rgba(0, 0, 0, 0.5)" style:color="white" style:margin="0">
@@ -289,3 +326,4 @@
         <br />
     </p>
 </foreignObject>
+-->
