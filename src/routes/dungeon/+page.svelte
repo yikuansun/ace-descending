@@ -246,9 +246,6 @@
     on:keyup={(e) => {
         keysPressed[e.key] = false;
     }}
-    on:mousedown={(e) => {
-        document.body.requestPointerLock();
-    }}
     on:mousemove={(e) => {
         if (document.pointerLockElement === document.body) {
             player.angle += (e.movementX / 1000) * player.angularVelocity;
@@ -302,6 +299,14 @@
     {/each}
 </g>
 
+<!-- enable mouse controls -->
+<foreignObject x="0" y="0" width="100%" height="100%">
+    <button style:width="100%" style:height="100%" style:opacity="0"
+        on:click={async () => {
+            await document.body.requestPointerLock();
+        }}>Enable Mouse Controls</button>
+</foreignObject>
+
 {#if pauseMenuVisible}
     <rect x={0} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
         in:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} />
@@ -318,6 +323,8 @@
                     lastTime = Date.now();
                     animationFrameId = requestAnimationFrame(gameLoop);
                 }
+
+                document.body.requestPointerLock();
             }}>Resume</button>
         </div>
     </foreignObject>
