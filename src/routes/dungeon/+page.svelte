@@ -13,6 +13,12 @@
 
     let usrSettings = {
         controlScheme: "mouse",
+        forwardKey: "w",
+        backwardKey: "s",
+        leftKey: "a",
+        rightKey: "d",
+        cameraLeftKey: "[",
+        cameraRightKey: "]",
     };
 
     let player = {
@@ -85,28 +91,30 @@
         deltaTime = (startTime - lastTime) / 1000;
         lastTime = startTime;
 
-        if (keysPressed["["]) {
-            player.angle -= deltaTime * player.angularVelocity;
-        }
-        if (keysPressed["]"]) {
-            player.angle += deltaTime * player.angularVelocity;
+        if (usrSettings.controlScheme == "keyboard") {
+            if (keysPressed[usrSettings.cameraLeftKey]) {
+                player.angle -= deltaTime * player.angularVelocity;
+            }
+            if (keysPressed[usrSettings.cameraRightKey]) {
+                player.angle += deltaTime * player.angularVelocity;
+            }
         }
         player.angle = player.angle % (2 * Math.PI);
 
         let movementX = 0, movementY = 0;
-        if (keysPressed["w"]) {
+        if (keysPressed[usrSettings.forwardKey]) {
             movementX = deltaTime * player.linearVelocity * Math.cos(player.angle);
             movementY = deltaTime * player.linearVelocity * Math.sin(player.angle);
         }
-        if (keysPressed["s"]) {
+        if (keysPressed[usrSettings.backwardKey]) {
             movementX = deltaTime * player.linearVelocity * Math.cos(player.angle) * (-1);
             movementY = deltaTime * player.linearVelocity * Math.sin(player.angle) * (-1);
         }
-        if (keysPressed["a"]) {
+        if (keysPressed[usrSettings.leftKey]) {
             movementX = deltaTime * player.linearVelocity * Math.sin(player.angle);
             movementY = deltaTime * player.linearVelocity * Math.cos(player.angle) * (-1);
         }
-        if (keysPressed["d"]) {
+        if (keysPressed[usrSettings.rightKey]) {
             movementX = deltaTime * player.linearVelocity * Math.sin(player.angle) * (-1);
             movementY = deltaTime * player.linearVelocity * Math.cos(player.angle);
         }
