@@ -8,8 +8,8 @@
      * @param val
      */
     function displayValue(val) {
-        if (val.length == 1) return val.toUpperCase();
         if (val == " ") return "Space";
+        if (val.length == 1) return val.toUpperCase();
         if (val == "ArrowUp") return "↑";
         if (val == "ArrowDown") return "↓";
         if (val == "ArrowLeft") return "←";
