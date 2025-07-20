@@ -7,6 +7,8 @@
     import { onMount, onDestroy } from "svelte";
     import { goto } from "$app/navigation";
 
+    export let screenWidth = 960, screenHeight = 540;
+
     // assets to preload
     import roomTexture1 from "$lib/assets/roomTextures/basic.svg";
     import roomTexture2 from "$lib/assets/roomTextures/dicey.svg";
@@ -49,7 +51,7 @@
     <!-- no need for the Run button, because audio can already be played -->
     <rect width="100%" height="100%" x="0" y="0" fill="black" />
 {:else}
-    <foreignObject width="100%" height="100%">
+    <foreignObject width={screenWidth} height={screenHeight}>
         <div style:display="flex" style:flex-direction="column" style:align-items="center" style:justify-content="center"
             style:width="100%" style:height="100%">
             <!-- audio may require user interaction to play -->
