@@ -213,6 +213,9 @@
 
     let pauseMenuVisible = false;
 
+    /** @type {Touch | null} used for mobile camera rotation (bc there is no movementX) */
+    let previousTouch = null;
+
     onMount(async () => {
         if (localStorage.getItem("usrSettings")) {
             let _usrSettings = JSON.parse(localStorage.getItem("usrSettings") || "{}");
@@ -335,30 +338,44 @@
 {/if}
 
 {#if usrSettings.controlScheme == "mobile"}
+    <rect x="0" y="0" width="100%" height="100%" opacity="0"
+        on:touchstart={(e) => {
+            e.preventDefault();
+            previousTouch = e.targetTouches[0];
+        }} on:touchmove={(e) => {
+            e.preventDefault();
+            let touch = e.targetTouches[0];
+            let movementX = 0;
+            if (previousTouch) movementX = touch.clientX - previousTouch.clientX;
+            previousTouch = touch;
+            player.angle -= (movementX / screenWidth * usrSettings.mouseSensitivity) * player.angularVelocity;
+        }} on:touchend={() => {
+            previousTouch = null;
+        }} />
     <g transform="translate(150, {screenHeight - 150})">
         <circle cx={0} cy={0} r="120" fill="#252525" opacity="0.5" stroke="black" stroke-width="5" stroke-opacity="0.75"
             on:touchstart={(e) => {
                 e.preventDefault();
                 let cx = e.currentTarget.getBoundingClientRect().x + e.currentTarget.getBoundingClientRect().width / 2;
                 let cy = e.currentTarget.getBoundingClientRect().y + e.currentTarget.getBoundingClientRect().height / 2;
-                if (e.touches[0].clientX < cx - 20) keysPressed[usrSettings.leftKey] = true;
+                if (e.targetTouches[0].clientX < cx - 20) keysPressed[usrSettings.leftKey] = true;
                 else keysPressed[usrSettings.leftKey] = false;
-                if (e.touches[0].clientX > cx + 20) keysPressed[usrSettings.rightKey] = true;
+                if (e.targetTouches[0].clientX > cx + 20) keysPressed[usrSettings.rightKey] = true;
                 else keysPressed[usrSettings.rightKey] = false;
-                if (e.touches[0].clientY < cy - 20) keysPressed[usrSettings.forwardKey] = true;
+                if (e.targetTouches[0].clientY < cy - 20) keysPressed[usrSettings.forwardKey] = true;
                 else keysPressed[usrSettings.forwardKey] = false;
-                if (e.touches[0].clientY > cy + 20) keysPressed[usrSettings.backwardKey] = true;
+                if (e.targetTouches[0].clientY > cy + 20) keysPressed[usrSettings.backwardKey] = true;
                 else keysPressed[usrSettings.backwardKey] = false;
             }} on:touchmove={(e) => {
                 let cx = e.currentTarget.getBoundingClientRect().x + e.currentTarget.getBoundingClientRect().width / 2;
                 let cy = e.currentTarget.getBoundingClientRect().y + e.currentTarget.getBoundingClientRect().height / 2;
-                if (e.touches[0].clientX < cx - 20) keysPressed[usrSettings.leftKey] = true;
+                if (e.targetTouches[0].clientX < cx - 20) keysPressed[usrSettings.leftKey] = true;
                 else keysPressed[usrSettings.leftKey] = false;
-                if (e.touches[0].clientX > cx + 20) keysPressed[usrSettings.rightKey] = true;
+                if (e.targetTouches[0].clientX > cx + 20) keysPressed[usrSettings.rightKey] = true;
                 else keysPressed[usrSettings.rightKey] = false;
-                if (e.touches[0].clientY < cy - 20) keysPressed[usrSettings.forwardKey] = true;
+                if (e.targetTouches[0].clientY < cy - 20) keysPressed[usrSettings.forwardKey] = true;
                 else keysPressed[usrSettings.forwardKey] = false;
-                if (e.touches[0].clientY > cy + 20) keysPressed[usrSettings.backwardKey] = true;
+                if (e.targetTouches[0].clientY > cy + 20) keysPressed[usrSettings.backwardKey] = true;
                 else keysPressed[usrSettings.backwardKey] = false;
             }} on:touchend={() => {
                 keysPressed[usrSettings.leftKey] = false;
