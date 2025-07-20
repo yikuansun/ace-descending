@@ -38,6 +38,7 @@
         <select bind:value={usrSettings.controlScheme}>
             <option value="mouse">Keyboard and Mouse</option>
             <option value="keyboard">Keyboard Only</option>
+            <option value="mobile">Mobile/Touchscreen</option>
         </select>
     </label> <br />
     <br />

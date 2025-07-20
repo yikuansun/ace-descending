@@ -334,6 +334,49 @@
     </foreignObject>
 {/if}
 
+{#if usrSettings.controlScheme == "mobile"}
+    <g transform="translate(150, {screenHeight - 150})">
+        <circle cx={0} cy={0} r="120" fill="#252525" opacity="0.5" stroke="black" stroke-width="5" stroke-opacity="0.75"
+            on:touchstart={(e) => {
+                e.preventDefault();
+                let cx = e.currentTarget.getBoundingClientRect().x + e.currentTarget.getBoundingClientRect().width / 2;
+                let cy = e.currentTarget.getBoundingClientRect().y + e.currentTarget.getBoundingClientRect().height / 2;
+                if (e.touches[0].clientX < cx - 20) keysPressed[usrSettings.leftKey] = true;
+                else keysPressed[usrSettings.leftKey] = false;
+                if (e.touches[0].clientX > cx + 20) keysPressed[usrSettings.rightKey] = true;
+                else keysPressed[usrSettings.rightKey] = false;
+                if (e.touches[0].clientY < cy - 20) keysPressed[usrSettings.forwardKey] = true;
+                else keysPressed[usrSettings.forwardKey] = false;
+                if (e.touches[0].clientY > cy + 20) keysPressed[usrSettings.backwardKey] = true;
+                else keysPressed[usrSettings.backwardKey] = false;
+            }} on:touchmove={(e) => {
+                let cx = e.currentTarget.getBoundingClientRect().x + e.currentTarget.getBoundingClientRect().width / 2;
+                let cy = e.currentTarget.getBoundingClientRect().y + e.currentTarget.getBoundingClientRect().height / 2;
+                if (e.touches[0].clientX < cx - 20) keysPressed[usrSettings.leftKey] = true;
+                else keysPressed[usrSettings.leftKey] = false;
+                if (e.touches[0].clientX > cx + 20) keysPressed[usrSettings.rightKey] = true;
+                else keysPressed[usrSettings.rightKey] = false;
+                if (e.touches[0].clientY < cy - 20) keysPressed[usrSettings.forwardKey] = true;
+                else keysPressed[usrSettings.forwardKey] = false;
+                if (e.touches[0].clientY > cy + 20) keysPressed[usrSettings.backwardKey] = true;
+                else keysPressed[usrSettings.backwardKey] = false;
+            }} on:touchend={() => {
+                keysPressed[usrSettings.leftKey] = false;
+                keysPressed[usrSettings.rightKey] = false;
+                keysPressed[usrSettings.forwardKey] = false;
+                keysPressed[usrSettings.backwardKey] = false;
+            }} />
+        <polygon points="-100,0 -70,-30 -70,30" fill="black" opacity={keysPressed[usrSettings.leftKey] ? "0.7" : "0.3"}
+            style:pointer-events="none" />
+        <polygon points="100,0 70,-30 70,30" fill="black" opacity={keysPressed[usrSettings.rightKey] ? "0.7" : "0.3"}
+            style:pointer-events="none" />
+        <polygon points="-30,-70 0,-100 30,-70" fill="black" opacity={keysPressed[usrSettings.forwardKey] ? "0.7" : "0.3"}
+            style:pointer-events="none" />
+        <polygon points="-30,70 0,100 30,70" fill="black" opacity={keysPressed[usrSettings.backwardKey] ? "0.7" : "0.3"}
+            style:pointer-events="none" />
+    </g>
+{/if}
+
 {#if pauseMenuVisible}
     <rect x={0} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
         in:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: -camera.viewport[0] / 2, duration: 700, opacity: 1 }} />
