@@ -41,6 +41,7 @@
                 autoplayAllowed = false;
             });
         });
+        aud.load();
     });
 </script>
 
