@@ -330,9 +330,9 @@
 
 {#if pauseMenuVisible}
     <rect x={0} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
-        in:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} />
+        in:fly={{ x: -camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: -camera.viewport[0] / 2, duration: 700, opacity: 1 }} />
     <rect x={camera.viewport[0] / 2} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
-        in:fly={{ x: camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: camera.viewport[0] / 2, duration: 700 }} />
+        in:fly={{ x: camera.viewport[0] / 2, duration: 700 }} out:fly={{ x: camera.viewport[0] / 2, duration: 700, opacity: 1 }} />
     <foreignObject x="0" y="0" width="100%" height="100%"
         in:fade={{ delay: 700, duration: 500 }} out:fade={{ duration: 500 }}>
         <div style:width="100%" style:height="100%" style:display="flex"
