@@ -222,6 +222,7 @@
     });
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <svelte:window
     on:keydown={(e) => {
         keysPressed[e.key] = true;
@@ -316,6 +317,17 @@
         Pause
     </button>
 </foreignObject>
+
+<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions a11y-mouse-events-have-key-events -->
+<rect x={0} y={0} width="100%" height="100%" opacity="0"
+    on:click={async (e) => {
+        await e.target.requestPointerLock();
+    }}
+    on:mousemove={async (e) => {
+        if (document.pointerLockElement == e.target) {
+            player.angle += e.movementX * 0.001;
+        }
+    }} />
 
 <!-- developer panel -->
 <!--
