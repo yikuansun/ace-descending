@@ -42,24 +42,26 @@
         </select>
     </label> <br />
     <br />
-    <b>Movement</b> <br />
-    <span>
-        Forward:
-        <KeyRecord bind:value={usrSettings.forwardKey} />
-    </span> <br />
-    <span>
-        Backward:
-        <KeyRecord bind:value={usrSettings.backwardKey} />
-    </span> <br />
-    <span>
-        Left:
-        <KeyRecord bind:value={usrSettings.leftKey} />
-    </span> <br />
-    <span>
-        Right:
-        <KeyRecord bind:value={usrSettings.rightKey} />
-    </span> <br />
-    <br />
+    {#if usrSettings.controlScheme != "mobile"}
+        <b>Movement</b> <br />
+        <span>
+            Forward:
+            <KeyRecord bind:value={usrSettings.forwardKey} />
+        </span> <br />
+        <span>
+            Backward:
+            <KeyRecord bind:value={usrSettings.backwardKey} />
+        </span> <br />
+        <span>
+            Left:
+            <KeyRecord bind:value={usrSettings.leftKey} />
+        </span> <br />
+        <span>
+            Right:
+            <KeyRecord bind:value={usrSettings.rightKey} />
+        </span> <br />
+        <br />
+    {/if}
     {#if usrSettings.controlScheme == "keyboard"}
         <b>Camera</b> <br />
         <span>
@@ -73,6 +75,12 @@
     {:else if usrSettings.controlScheme == "mouse"}
         <span>
             Mouse Sensitivity:
+            <input type="range" min="0.5" max="3" step="0.1" bind:value={usrSettings.mouseSensitivity} />
+            <input type="number" step="0.1" bind:value={usrSettings.mouseSensitivity} style:width="50px" />
+        </span>
+    {:else if usrSettings.controlScheme == "mobile"}
+        <span>
+            Toch Sensitivity:
             <input type="range" min="0.5" max="3" step="0.1" bind:value={usrSettings.mouseSensitivity} />
             <input type="number" step="0.1" bind:value={usrSettings.mouseSensitivity} style:width="50px" />
         </span>
