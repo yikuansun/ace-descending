@@ -13,6 +13,9 @@
         rightKey: "d",
         cameraLeftKey: "[",
         cameraRightKey: "]",
+        resolution: 200,
+        angularVelocity: 2,
+        mouseSensitivity: 1,
     };
 
     onMount(async () => {
@@ -66,7 +69,26 @@
             Rotate Right:
             <KeyRecord bind:value={usrSettings.cameraRightKey} />
         </span> <br />
+    {:else if usrSettings.controlScheme == "mouse"}
+        <span>
+            Mouse Sensitivity:
+            <input type="range" min="0.5" max="3" step="0.1" bind:value={usrSettings.mouseSensitivity} />
+            <input type="number" step="0.1" bind:value={usrSettings.mouseSensitivity} style:width="50px" />
+        </span>
     {/if}
+</foreignObject>
+
+<foreignObject x={screenWidth / 2} y="0" width={screenWidth / 2} height={screenHeight - 50}>
+    <label>
+        Resolution:
+        <input type="range" min="50" max="400" bind:value={usrSettings.resolution} />
+        <input type="number" bind:value={usrSettings.resolution} style:width="50px" />
+    </label> <br />
+    <label>
+        Rotational Speed:
+        <input type="range" min="0.5" max="3" step="0.1" bind:value={usrSettings.angularVelocity} />
+        <input type="number" step="0.1" bind:value={usrSettings.angularVelocity} style:width="50px" />
+    </label> <br />
 </foreignObject>
 
 <foreignObject x="0" y={screenHeight - 50} width={screenWidth} height="50">

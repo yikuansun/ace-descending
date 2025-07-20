@@ -19,6 +19,9 @@
         rightKey: "d",
         cameraLeftKey: "[",
         cameraRightKey: "]",
+        resolution: 200,
+        angularVelocity: 2,
+        mouseSensitivity: 1,
     };
 
     let player = {
@@ -217,6 +220,9 @@
                 for (let key in _usrSettings) usrSettings[key] = _usrSettings[key];
             }
         }
+
+        camera.resolution = usrSettings.resolution;
+        player.angularVelocity = usrSettings.angularVelocity;
         /*const img = await loadImage(levelMap);
         let canvas = document.createElement("canvas");
         canvas.width = img.width;
@@ -267,7 +273,7 @@
     }}
     on:mousemove={(e) => {
         if (usrSettings.controlScheme == "mouse" && document.pointerLockElement === document.body) {
-            player.angle += (e.movementX / 1000) * player.angularVelocity;
+            player.angle += (e.movementX / 1000 * usrSettings.mouseSensitivity) * player.angularVelocity;
         }
     }}
 />
