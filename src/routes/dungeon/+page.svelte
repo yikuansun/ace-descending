@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { onDestroy } from "svelte";
+    import { goto } from "$app/navigation";
     import PixelManipulator from "$lib/helpers/PixelManipulator";
     import loadImage from "$lib/helpers/loadImage";
     import LevelGenerator from "$lib/helpers/LevelGenerator";
@@ -9,6 +10,10 @@
     import { fly, fade } from "svelte/transition";
 
     export let screenWidth = 960, screenHeight = 540;
+
+    let usrSettings = {
+        controlScheme: "mouse",
+    };
 
     let player = {
         x: 128,
@@ -198,6 +203,12 @@
     let pauseMenuVisible = false;
 
     onMount(async () => {
+        if (localStorage.getItem("usrSettings")) {
+            let _usrSettings = JSON.parse(localStorage.getItem("usrSettings") || "{}");
+            if (typeof _usrSettings == "object") {
+                for (let key in _usrSettings) usrSettings[key] = _usrSettings[key];
+            }
+        }
         /*const img = await loadImage(levelMap);
         let canvas = document.createElement("canvas");
         canvas.width = img.width;
@@ -232,14 +243,14 @@
             if (pauseMenuVisible) {
                 if (animationFrameId !== -1) cancelAnimationFrame(animationFrameId);
                 animationFrameId = -1;
-                document.exitPointerLock();
+                if (usrSettings.controlScheme == "mouse") document.exitPointerLock();
             }
             else {
                 if (animationFrameId === -1) {
                     lastTime = Date.now();
                     animationFrameId = requestAnimationFrame(gameLoop);
                 }
-                document.body.requestPointerLock();
+                if (usrSettings.controlScheme == "mouse") document.body.requestPointerLock();
             }
         }
     }}
@@ -247,7 +258,7 @@
         keysPressed[e.key] = false;
     }}
     on:mousemove={(e) => {
-        if (document.pointerLockElement === document.body) {
+        if (usrSettings.controlScheme == "mouse" && document.pointerLockElement === document.body) {
             player.angle += (e.movementX / 1000) * player.angularVelocity;
         }
     }}
@@ -299,13 +310,15 @@
     {/each}
 </g>
 
-<!-- enable mouse controls -->
-<foreignObject x="0" y="0" width="100%" height="100%">
-    <button style:width="100%" style:height="100%" style:opacity="0"
-        on:click={async () => {
-            await document.body.requestPointerLock();
-        }}>Enable Mouse Controls</button>
-</foreignObject>
+{#if usrSettings.controlScheme == "mouse"}
+    <!-- enable mouse controls -->
+    <foreignObject x="0" y="0" width="100%" height="100%">
+        <button style:width="100%" style:height="100%" style:opacity="0"
+            on:click={async () => {
+                await document.body.requestPointerLock();
+            }}>Enable Mouse Controls</button>
+    </foreignObject>
+{/if}
 
 {#if pauseMenuVisible}
     <rect x={0} y={0} width={camera.viewport[0] / 2} height={camera.viewport[1]} fill="#222222" opacity="0.5"
@@ -324,8 +337,12 @@
                     animationFrameId = requestAnimationFrame(gameLoop);
                 }
 
-                document.body.requestPointerLock();
+                if (usrSettings.controlScheme == "mouse") document.body.requestPointerLock();
             }}>Resume</button>
+            <br />
+            <button on:click={() => {
+                goto("../menu");
+            }}>Exit to Menu</button>
         </div>
     </foreignObject>
 {/if}

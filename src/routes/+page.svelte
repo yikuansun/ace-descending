@@ -11,8 +11,7 @@
     import roomTexture1 from "$lib/assets/roomTextures/basic.svg";
     import roomTexture2 from "$lib/assets/roomTextures/dicey.svg";
     import roomTexture3 from "$lib/assets/roomTextures/octagon.svg";
-    import roomTexture4 from "$lib/assets/roomTextures/barriers.svg";
-    import roomTexture5 from "$lib/assets/roomTextures/stripes.svg";
+    import roomTexture4 from "$lib/assets/roomTextures/stripes.svg";
     // TODO: import the rest of your assets here
 
     /**
@@ -27,7 +26,7 @@
 
     onMount(() => {
         loadAssets([
-            roomTexture1, roomTexture2, roomTexture3, roomTexture4, roomTexture5,
+            roomTexture1, roomTexture2, roomTexture3, roomTexture4,
             // TODO: add the rest of your assets here
         ]);
 
