@@ -392,6 +392,14 @@
         <polygon points="-30,70 0,100 30,70" fill="black" opacity={keysPressed[usrSettings.backwardKey] ? "0.7" : "0.3"}
             style:pointer-events="none" />
     </g>
+    <rect x={screenWidth - 70} y={20} width={50} height={50} fill="#252525" opacity="0.5" stroke="black" stroke-width="5" stroke-opacity="0.75"
+        on:touchstart={() => {
+            pauseMenuVisible = true;
+            if (animationFrameId !== -1) cancelAnimationFrame(animationFrameId);
+            animationFrameId = -1;
+        }} />
+    <line x1={screenWidth - 52} y1={32} x2={screenWidth - 52} y2={58} stroke="black" stroke-width="8" stroke-opacity="0.25" style:pointer-events="none" />
+    <line x1={screenWidth - 38} y1={32} x2={screenWidth - 38} y2={58} stroke="black" stroke-width="8" stroke-opacity="0.25" style:pointer-events="none" />
 {/if}
 
 {#if pauseMenuVisible}
