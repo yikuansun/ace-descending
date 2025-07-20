@@ -226,9 +226,33 @@
 <svelte:window
     on:keydown={(e) => {
         keysPressed[e.key] = true;
+
+        if (e.key == "p") {
+            pauseMenuVisible = !pauseMenuVisible;
+            if (pauseMenuVisible) {
+                if (animationFrameId !== -1) cancelAnimationFrame(animationFrameId);
+                animationFrameId = -1;
+                document.exitPointerLock();
+            }
+            else {
+                if (animationFrameId === -1) {
+                    lastTime = Date.now();
+                    animationFrameId = requestAnimationFrame(gameLoop);
+                }
+                document.body.requestPointerLock();
+            }
+        }
     }}
     on:keyup={(e) => {
         keysPressed[e.key] = false;
+    }}
+    on:mousedown={(e) => {
+        document.body.requestPointerLock();
+    }}
+    on:mousemove={(e) => {
+        if (document.pointerLockElement === document.body) {
+            player.angle += (e.movementX / 1000) * player.angularVelocity;
+        }
     }}
 />
 
@@ -298,36 +322,6 @@
         </div>
     </foreignObject>
 {/if}
-
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-<foreignObject x={camera.viewport[0] - 40} y={10} width="30" height="30">
-    <button on:click={() => {
-            pauseMenuVisible = !pauseMenuVisible;
-            if (pauseMenuVisible) {
-                if (animationFrameId !== -1) cancelAnimationFrame(animationFrameId);
-                animationFrameId = -1;
-            }
-            else {
-                if (animationFrameId === -1) {
-                    lastTime = Date.now();
-                    animationFrameId = requestAnimationFrame(gameLoop);
-                }
-            }
-        }} style:width="100%" style:height="100%">
-        Pause
-    </button>
-</foreignObject>
-
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions a11y-mouse-events-have-key-events -->
-<rect x={0} y={0} width="100%" height="100%" opacity="0"
-    on:click={async (e) => {
-        await e.target.requestPointerLock();
-    }}
-    on:mousemove={async (e) => {
-        if (document.pointerLockElement == e.target) {
-            player.angle += e.movementX * 0.001;
-        }
-    }} />
 
 <!-- developer panel -->
 <!--
