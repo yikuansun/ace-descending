@@ -65,9 +65,7 @@
      * x: number,
      * y: number,
     }>} */
-    let entities = [
-        { x: 200, y: 256 },
-    ];
+    let entities = [];
     /** @type {Array.<{
      * type: "wall" | "entity",
      * angle: number,
@@ -209,6 +207,17 @@
             image: canvas,
         };
         stageImageSrc = canvas.toDataURL();
+
+        for (let r = 0; r < levelGen.gridSize; r++) {
+            for (let c = 0; c < levelGen.gridSize; c++) {
+                let x = levelGen.roomSize * c;
+                let y = levelGen.roomSize * r;
+                entities = [...entities, {
+                    x: x + levelGen.roomSize / 2,
+                    y: y + levelGen.roomSize / 2,
+                }];
+            }
+        }
     }
 
     let pauseMenuVisible = false;
@@ -304,7 +313,7 @@
         <line x1={x2d} y1={camera.viewport[1] / 2 - height2d / 2} x2={x2d} y2={camera.viewport[1] / 2 + height2d / 2}
             stroke="rgb({colorFoggy[0]}, {colorFoggy[1]}, {colorFoggy[2]})" stroke-width={thickness} />
     {/if}
-    {#if item.type == "entity"}
+    {#if item.type == "entity" && item.distance < camera.maxDepth}
         {@const entity = item}
         {@const x2d = (entity.angle + camera.aov / 2) / camera.aov * camera.viewport[0]}
         {@const size2d = 5000 / entity.distance}
