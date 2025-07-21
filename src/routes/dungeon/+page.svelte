@@ -106,20 +106,20 @@
 
         let movementX = 0, movementY = 0;
         if (keysPressed[usrSettings.forwardKey]) {
-            movementX = deltaTime * player.linearVelocity * Math.cos(player.angle);
-            movementY = deltaTime * player.linearVelocity * Math.sin(player.angle);
+            movementX += deltaTime * player.linearVelocity * Math.cos(player.angle);
+            movementY += deltaTime * player.linearVelocity * Math.sin(player.angle);
         }
         if (keysPressed[usrSettings.backwardKey]) {
-            movementX = deltaTime * player.linearVelocity * Math.cos(player.angle) * (-1);
-            movementY = deltaTime * player.linearVelocity * Math.sin(player.angle) * (-1);
+            movementX += deltaTime * player.linearVelocity * Math.cos(player.angle) * (-1);
+            movementY += deltaTime * player.linearVelocity * Math.sin(player.angle) * (-1);
         }
         if (keysPressed[usrSettings.leftKey]) {
-            movementX = deltaTime * player.linearVelocity * Math.sin(player.angle);
-            movementY = deltaTime * player.linearVelocity * Math.cos(player.angle) * (-1);
+            movementX += deltaTime * player.linearVelocity * Math.sin(player.angle);
+            movementY += deltaTime * player.linearVelocity * Math.cos(player.angle) * (-1);
         }
         if (keysPressed[usrSettings.rightKey]) {
-            movementX = deltaTime * player.linearVelocity * Math.sin(player.angle) * (-1);
-            movementY = deltaTime * player.linearVelocity * Math.cos(player.angle);
+            movementX += deltaTime * player.linearVelocity * Math.sin(player.angle) * (-1);
+            movementY += deltaTime * player.linearVelocity * Math.cos(player.angle);
         }
 
         if (stage.data.getPixel(player.x, player.y)[3] === 0) {
